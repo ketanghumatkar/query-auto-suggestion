@@ -1,0 +1,4 @@
+flask
+numpy
+bert-serving-client
+termcolor
