@@ -1,5 +1,6 @@
 import flask
 from flask import request, jsonify
+from flask_cors import CORS, cross_origin
 import numpy as np
 from bert_serving.client import BertClient
 from termcolor import colored
@@ -7,13 +8,16 @@ import yaml
 
 
 app = flask.Flask(__name__)
+CORS(app)
+app.run()
 app.config["DEBUG"] = True
 
 # load intents to bert
 prefix_q = '##### **Q:** '
 topk = 5
 
-yaml_file = open("./data/nlu.yml")
+# yaml_file = open("../rasa-auto-suggestion/data/nlu.yml")
+yaml_file = open("../insurance-demo/data/nlu.yml")
 parsed_yaml_file = yaml.load(yaml_file, Loader=yaml.FullLoader)
 
 questions = []
@@ -42,10 +46,10 @@ def api_id():
     # Check if an ID was provided as part of the URL.
     # If ID is provided, assign it to a variable.
     # If no ID is provided, display an error in the browser.
-    if 'q' in request.args:
-        query = request.args['q']
+    if 'query' in request.args:
+        query = request.args['query']
     else:
-        return "Error: No q field provided. Please specify an q."
+        return "Error: No query field provided. Please specify an query."
 
     # Create an empty list for our results
     results = []
@@ -63,6 +67,4 @@ def api_id():
 
     # Use the jsonify function from Flask to convert our list of
     # Python dictionaries to the JSON format.
-    return jsonify(results)
-
-app.run()
+    return jsonify({'suggestions': results})

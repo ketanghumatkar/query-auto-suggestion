@@ -3,3 +3,4 @@ numpy
 bert-serving-client
 termcolor
 pyyaml
+flask-cors
